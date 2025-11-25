@@ -1,4 +1,3 @@
-// src/pages/SignUp.jsx
 import { useState } from "react";
 import {
   Avatar,

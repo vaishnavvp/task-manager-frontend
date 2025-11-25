@@ -1,4 +1,3 @@
-// src/pages/TaskForm.jsx
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -27,7 +26,7 @@ const TaskForm = () => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const fetchTask = async () => {
-    // quick way: fetch list and find by id
+    // fetch list and find by id
     const { data } = await API.get("/tasks", { params: { page: 1, limit: 100 } });
     const task = data.tasks.find((t) => t._id === id);
     if (task) {

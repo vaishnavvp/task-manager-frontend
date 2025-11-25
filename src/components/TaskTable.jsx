@@ -1,4 +1,3 @@
-// src/components/TaskTable.jsx
 import {
   Table,
   TableBody,
@@ -14,6 +13,15 @@ import { useAuth } from "../context/AuthContext";
 const TaskTable = ({ tasks, onEdit, onDelete }) => {
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
+
+  const canEdit = (task) => {
+    const createdById =
+      typeof task.createdBy === "object"
+        ? task.createdBy._id
+        : task.createdBy;
+
+    return isAdmin || createdById === user._id;
+  };
 
   const formatDate = (dateString) => {
     if (!dateString) return "-";
@@ -31,6 +39,7 @@ const TaskTable = ({ tasks, onEdit, onDelete }) => {
           <TableCell align="right">Actions</TableCell>
         </TableRow>
       </TableHead>
+
       <TableBody>
         {tasks.map((task) => (
           <TableRow key={task._id}>
@@ -44,10 +53,16 @@ const TaskTable = ({ tasks, onEdit, onDelete }) => {
               />
             </TableCell>
             <TableCell>{formatDate(task.createdAt)}</TableCell>
+
             <TableCell align="right">
-              <IconButton onClick={() => onEdit(task)} size="small">
-                <Edit fontSize="small" />
-              </IconButton>
+              {/* Show edit only for admin OR creator */}
+              {canEdit(task) && (
+                <IconButton onClick={() => onEdit(task)} size="small">
+                  <Edit fontSize="small" />
+                </IconButton>
+              )}
+
+              {/* Show delete only for admin */}
               {isAdmin && (
                 <IconButton
                   onClick={() => onDelete(task)}

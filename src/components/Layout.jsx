@@ -1,4 +1,3 @@
-// src/components/Layout.jsx
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import {
   AppBar,

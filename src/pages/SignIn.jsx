@@ -1,4 +1,3 @@
-// src/pages/SignIn.jsx
 import { useState } from "react";
 import {
   Avatar,
