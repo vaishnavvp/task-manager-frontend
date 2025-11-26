@@ -10,22 +10,30 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Skeleton,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
+import TaskSkeleton from "../components/TaskSkeleton";
 import TaskTable from "../components/TaskTable";
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [pageInfo, setPageInfo] = useState({ page: 1, totalPages: 1 });
   const [confirmTask, setConfirmTask] = useState(null);
+  const [loading, setLoading] = useState(true);  // loading state
   const navigate = useNavigate();
 
   const fetchTasks = async (page = 1) => {
-    const { data } = await API.get("/tasks", { params: { page, limit: 5 } });
-    setTasks(data.tasks);
-    setPageInfo({ page: data.page, totalPages: data.totalPages });
+    setLoading(true); // start loader
+    try {
+      const { data } = await API.get("/tasks", { params: { page, limit: 5 } });
+      setTasks(data.tasks);
+      setPageInfo({ page: data.page, totalPages: data.totalPages });
+    } finally {
+      setLoading(false); // stop loader
+    }
   };
 
   useEffect(() => {
@@ -51,6 +59,7 @@ const Dashboard = () => {
     fetchTasks(pageInfo.page);
   };
 
+
   return (
     <Box>
       <Stack
@@ -59,7 +68,7 @@ const Dashboard = () => {
         alignItems="center"
         mb={3}
       >
-        <Typography variant="h5">Tasks</Typography>
+        <Typography variant="h5">Tasks To Do</Typography>
         <Button
           variant="contained"
           startIcon={<Add />}
@@ -69,18 +78,25 @@ const Dashboard = () => {
         </Button>
       </Stack>
 
-      <Paper sx={{ p: 2, mb: 2 }}>
-        <TaskTable tasks={tasks} onEdit={handleEdit} onDelete={handleDelete} />
-      </Paper>
+      {loading ? (
+        <TaskSkeleton rows={5} />
+      ) : (
+        <Paper sx={{ p: 2, mb: 2 }}>
+          <TaskTable tasks={tasks} onEdit={handleEdit} onDelete={handleDelete} />
+        </Paper>
+      )}
 
-      <Stack direction="row" justifyContent="center">
-        <Pagination
-          count={pageInfo.totalPages}
-          page={pageInfo.page}
-          onChange={handlePageChange}
-          color="primary"
-        />
-      </Stack>
+
+      {!loading && (
+        <Stack direction="row" justifyContent="center">
+          <Pagination
+            count={pageInfo.totalPages}
+            page={pageInfo.page}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Stack>
+      )}
 
       <Dialog open={!!confirmTask} onClose={() => setConfirmTask(null)}>
         <DialogTitle>Delete Task</DialogTitle>

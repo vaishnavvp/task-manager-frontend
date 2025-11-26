@@ -29,7 +29,7 @@ const Layout = () => {
             to="/"
             sx={{ textDecoration: "none", color: "inherit" }}
           >
-            Task Manager
+            Task Manager Dashboard
           </Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
