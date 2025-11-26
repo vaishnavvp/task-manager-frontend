@@ -22,17 +22,17 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [pageInfo, setPageInfo] = useState({ page: 1, totalPages: 1 });
   const [confirmTask, setConfirmTask] = useState(null);
-  const [loading, setLoading] = useState(true);  // loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchTasks = async (page = 1) => {
-    setLoading(true); // start loader
+    setLoading(true);
     try {
       const { data } = await API.get("/tasks", { params: { page, limit: 5 } });
       setTasks(data.tasks);
       setPageInfo({ page: data.page, totalPages: data.totalPages });
     } finally {
-      setLoading(false); // stop loader
+      setLoading(false);
     }
   };
 

@@ -33,7 +33,6 @@ const TaskForm = () => {
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  // ----------- Fetch Task for Edit Mode -----------
   const fetchTask = async () => {
     setFetching(true);
     try {
@@ -57,7 +56,6 @@ const TaskForm = () => {
     if (isEdit) fetchTask();
   }, [id]);
 
-  // ----------- Submit Form -----------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -70,7 +68,7 @@ const TaskForm = () => {
         await API.post("/tasks", form);
       }
 
-      setSuccess(true); // Show success toast
+      setSuccess(true);
 
       setTimeout(() => {
         navigate("/");
@@ -113,13 +111,11 @@ const TaskForm = () => {
 
       <Paper sx={{ p: 3 }}>
         {fetching ? (
-          // ---------- Skeleton Loader While Fetching ----------
           <Stack spacing={2}>
             <CircularProgress size={36} sx={{ mx: "auto", my: 4 }} />
             <Typography align="center">Loading task...</Typography>
           </Stack>
         ) : (
-          // ---------- Form ----------
           <Box component="form" onSubmit={handleSubmit}>
             <Stack spacing={2}>
               <TextField

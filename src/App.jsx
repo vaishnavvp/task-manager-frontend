@@ -1,10 +1,15 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import TaskForm from "./pages/TaskForm";
 import Layout from "./components/Layout";
+
 import { useAuth } from "./context/AuthContext";
+import { useLoader } from "./context/LoaderContext";
+import { setupInterceptors } from "./api";
 
 const PrivateRoute = ({ children }) => {
   const { user } = useAuth();
@@ -12,6 +17,12 @@ const PrivateRoute = ({ children }) => {
 };
 
 export default function App() {
+  const { showLoader, hideLoader } = useLoader();
+
+  useEffect(() => {
+    setupInterceptors(showLoader, hideLoader);
+  }, []);
+
   return (
     <Routes>
       <Route path="/signin" element={<SignIn />} />
@@ -30,6 +41,7 @@ export default function App() {
         <Route path="tasks/:id" element={<TaskForm />} />
       </Route>
 
+      {/* Redirect unknown routes */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

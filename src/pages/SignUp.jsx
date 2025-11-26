@@ -26,8 +26,8 @@ export default function SignUp() {
     role: "user",
   });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);   // loader
-  const [success, setSuccess] = useState(false);   // success toast
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ export default function SignUp() {
       const { data } = await API.post("/auth/signup", form);
       login(data);
 
-      setSuccess(true); // show success toast
+      setSuccess(true);
 
       // Navigate after short delay
       setTimeout(() => {
