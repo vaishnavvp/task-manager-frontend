@@ -1,16 +1,83 @@
-# React + Vite
+Task Manager – MERN Stack (React + Node + MongoDB)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a full-stack Task Management Application built using the MERN Stack, with a strong focus on Frontend UI/UX (React + MUI), including authentication, role-based access, task CRUD operations, pagination, loaders, theme toggle, and toast notifications.
 
-Currently, two official plugins are available:
+FEATURES
+Authentication
+- Sign Up / Sign In using JWT
+- Login persistence via localStorage
+- Global AuthContext
+- Private routes protection
+- Role-based routing (Admin / Normal User)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+User Roles
+Normal User:
+- Create Task
+- Edit Own Tasks
+- View Tasks
 
-## React Compiler
+Admin:
+- Edit Any Task
+- Delete Tasks
+- Full Access
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Tasks Module
+- Create, edit, delete (admin only), and view tasks
+- Each task includes:
+  - Title, Description, Status, Created Date, Created By
+- Pagination (5 tasks per page)
+- Skeleton loader while fetching tasks
+- Confirmation dialog for delete
+- Toast notifications for create/update/delete
 
-## Expanding the ESLint configuration
+UI / UX
+- Material UI (MUI)
+- Responsive layout
+- Light/Dark theme toggle with toast
+- Global loader overlay
+- Clean layout with navigation bar
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+State Management
+- AuthContext
+- ThemeContext
+- LoaderContext
+
+TECH STACK
+Frontend:
+- React (Vite), React Router, MUI, Axios, Context API
+
+Backend:
+- Node.js, Express.js, MongoDB Atlas, JWT, Bcrypt, CORS
+
+PROJECT STRUCTURE
+Frontend:
+  components/
+  pages/
+  context/
+  api.js
+  App.jsx
+  main.jsx
+
+Backend:
+  models/
+  routes/
+  middleware/
+  config/
+  server.js
+
+SETUP
+Backend:
+  npm install
+  Configure .env
+  npm run dev
+
+Frontend:
+  npm install
+  Configure .env
+  npm run dev
+
+DEPLOYMENT
+Frontend → Vercel
+Backend → Render
+
+This project demonstrates a complete MERN application with professional UI, authentication, authorization, loaders, theme switcher, and deployment.
