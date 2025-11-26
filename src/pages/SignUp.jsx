@@ -10,6 +10,8 @@ import {
   MenuItem,
   Alert,
   Link as MuiLink,
+  CircularProgress,
+  Snackbar,
 } from "@mui/material";
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import { Link, useNavigate } from "react-router-dom";
@@ -24,6 +26,9 @@ export default function SignUp() {
     role: "user",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);   // loader
+  const [success, setSuccess] = useState(false);   // success toast
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -33,13 +38,22 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const { data } = await API.post("/auth/signup", form);
       login(data);
-      navigate("/");
+
+      setSuccess(true); // show success toast
+
+      // Navigate after short delay
+      setTimeout(() => {
+        navigate("/");
+      }, 1200);
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,11 +73,25 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
+
+        {/* Error toast */}
         {error && (
           <Alert severity="error" sx={{ mt: 2, width: "100%" }}>
             {error}
           </Alert>
         )}
+
+        {/*Success toast */}
+        <Snackbar
+          open={success}
+          autoHideDuration={1200}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert severity="success" sx={{ width: "100%" }}>
+            Signup successful!
+          </Alert>
+        </Snackbar>
+
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <TextField
             name="name"
@@ -73,6 +101,7 @@ export default function SignUp() {
             margin="normal"
             value={form.name}
             onChange={handleChange}
+            disabled={loading}
           />
           <TextField
             name="email"
@@ -82,6 +111,7 @@ export default function SignUp() {
             margin="normal"
             value={form.email}
             onChange={handleChange}
+            disabled={loading}
           />
           <TextField
             name="password"
@@ -92,6 +122,7 @@ export default function SignUp() {
             margin="normal"
             value={form.password}
             onChange={handleChange}
+            disabled={loading}
           />
           <TextField
             select
@@ -101,17 +132,34 @@ export default function SignUp() {
             fullWidth
             value={form.role}
             onChange={handleChange}
+            disabled={loading}
           >
             <MenuItem value="user">Normal User</MenuItem>
             <MenuItem value="admin">Admin</MenuItem>
           </TextField>
 
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
-            Sign Up
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3 }}
+            disabled={loading}
+          >
+            {loading ? (
+              <CircularProgress size={22} sx={{ color: "white" }} />
+            ) : (
+              "Sign Up"
+            )}
           </Button>
+
           <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
             <Grid item>
-              <MuiLink component={Link} to="/signin" variant="body2">
+              <MuiLink
+                component={Link}
+                to="/signin"
+                variant="body2"
+                sx={{ pointerEvents: loading ? "none" : "auto" }}
+              >
                 Already have an account? Sign in
               </MuiLink>
             </Grid>

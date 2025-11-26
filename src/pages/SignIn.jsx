@@ -9,6 +9,8 @@ import {
   Typography,
   Container,
   Alert,
+  CircularProgress,
+  Snackbar,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link, useNavigate } from "react-router-dom";
@@ -19,19 +21,32 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const { data } = await API.post("/auth/signin", { email, password });
+
       login(data);
-      navigate("/");
+
+      //show success toast
+      setSuccess(true);
+
+      // Navigate after short delay
+      setTimeout(() => {
+        navigate("/");
+      }, 1200);
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,14 +63,29 @@ export default function SignIn() {
         <Avatar sx={{ m: 1 }}>
           <LockOutlinedIcon />
         </Avatar>
+
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+
+        {/*Error Toast */}
         {error && (
           <Alert severity="error" sx={{ mt: 2, width: "100%" }}>
             {error}
           </Alert>
         )}
+
+        {/*Success Snackbar */}
+        <Snackbar
+          open={success}
+          autoHideDuration={1200}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert severity="success" sx={{ width: "100%" }}>
+            Login Successful!
+          </Alert>
+        </Snackbar>
+
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -66,7 +96,9 @@ export default function SignIn() {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
           />
+
           <TextField
             margin="normal"
             required
@@ -76,13 +108,31 @@ export default function SignIn() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
-            Sign In
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3 }}
+            disabled={loading}
+          >
+            {loading ? (
+              <CircularProgress size={22} sx={{ color: "white" }} />
+            ) : (
+              "Sign In"
+            )}
           </Button>
+
           <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
             <Grid item>
-              <MuiLink component={Link} to="/signup" variant="body2">
+              <MuiLink
+                component={Link}
+                to="/signup"
+                variant="body2"
+                sx={{ pointerEvents: loading ? "none" : "auto" }}
+              >
                 {"Don't have an account? Sign Up"}
               </MuiLink>
             </Grid>
