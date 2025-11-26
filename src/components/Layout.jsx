@@ -31,11 +31,15 @@ const Layout = () => {
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <ThemeToggle />
-
             {user && (
-              <Button color="inherit" onClick={handleLogout}>
-                Logout
-              </Button>
+              <>
+                <Typography variant="body2">
+                  {user.name} ({user.role})
+                </Typography>
+                <Button color="inherit" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
             )}
           </Box>
         </Toolbar>
